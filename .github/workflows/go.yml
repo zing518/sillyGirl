@@ -26,6 +26,10 @@ jobs:
       run:
         cd develop && git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/core.git
         
+    - name: Git clone web
+      run:
+        cd develop/core && git clone https://gitlab.com/cdle/web.git && cd web && rm -rf .git
+        
     - name: Git clone qinglong
       run:
         cd develop && git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/qinglong.git
