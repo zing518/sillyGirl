@@ -28,7 +28,7 @@ jobs:
         
     - name: Git clone web
       run:
-        cd develop/core && git clone https://gitlab.com/cdle/web.git && cd web && rm -rf .git && mv web admin
+        cd develop/core && git clone https://gitlab.com/cdle/web.git && mv web admin && cd admin && rm -rf .git
         
     - name: Git clone qinglong
       run:
