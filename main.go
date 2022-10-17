@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
