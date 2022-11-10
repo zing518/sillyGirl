@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"time"
 
@@ -48,15 +47,9 @@ func main() {
 				f := &core.Faker{
 					Type:    "terminal",
 					Message: string(data),
-					Carry:   make(chan string),
 					Admin:   true,
 				}
 				core.Senders <- f
-				go func() {
-					for v := range f.Listen() {
-						fmt.Printf("\x1b[%dm%s \x1b[0m\n", 31, v)
-					}
-				}()
 			}
 			logs.Info("终端交互异常,请检查运行环境设置,如果是docker环境,请附加-it参数")
 		} else {
