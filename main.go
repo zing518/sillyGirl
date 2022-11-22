@@ -59,3 +59,15 @@ func main() {
 
 	select {}
 }
+
+// docker run \
+// --name=wxedge4 \
+// --dns=223.5.5.5 \
+// --restart=always \
+// --privileged \
+// --network lanet --ip=192.168.1.237 \
+// --tmpfs /run \
+// --tmpfs /tmp \
+// -v /opt/onething4:/storage:rw \
+// -d \
+// registry.hub.docker.com/onething1/wxedge
