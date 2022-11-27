@@ -5,7 +5,6 @@ import (
 	_ "github.com/cdle/sillyGirl/develop/core/senders/qq"
 	_ "github.com/cdle/sillyGirl/develop/core/senders/tg"
 	_ "github.com/cdle/sillyGirl/develop/core/senders/wxmp"
-	_ "github.com/cdle/sillyGirl/develop/core/senders/wx"
 	_ "github.com/cdle/sillyGirl/develop/core/senders/pgm"
 	_ "github.com/cdle/sillyGirl/develop/core/senders/sxg"
 	_ "github.com/cdle/sillyGirl/develop/core/senders/web"
