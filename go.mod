@@ -13,6 +13,8 @@ require (
 	github.com/beego/beego/v2 v2.0.1
 	github.com/boltdb/bolt v1.3.1
 	github.com/buger/jsonparser v1.1.1
+	github.com/dop251/goja v0.0.0-20211203105952-bf6af58bbcc8
+	github.com/dop251/goja_nodejs v0.0.0-20210225215109-d91c329300e7
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/goccy/go-json v0.9.7
@@ -27,11 +29,6 @@ require (
 )
 
 require (
-	github.com/dop251/goja v0.0.0-20221118162653-d4bf6fde1b86
-	github.com/dop251/goja_nodejs v0.0.0-20221009164102-3aa5028e57f6
-)
-
-require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8 // indirect
@@ -42,7 +39,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/dlclark/regexp2 v1.7.0 // indirect
+	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gin-contrib/gzip v0.0.6
@@ -72,7 +69,7 @@ require (
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
