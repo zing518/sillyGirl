@@ -25,5 +25,5 @@ fi
 echo "检测到版本 $v"
 echo "正在从 $d 下载..."
 curl -o $n $d && chmod 777 $n
-echo "已安装到 $n，开始运行..."
-"$s/$n" -t
+echo "傻妞已安装到 $s"
+echo "请手动运行 $s/$n -t"
