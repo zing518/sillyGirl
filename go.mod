@@ -4,21 +4,15 @@ go 1.18
 
 replace github.com/willf/bitset v1.2.0 => github.com/bits-and-blooms/bitset v1.2.0
 
-replace gorm.io/driver/sqlite => github.com/go-gorm/sqlite v1.2.6
-
 replace gorm.io/gorm => github.com/go-gorm/gorm v1.22.5
 
 require (
 	github.com/EDDYCJY/fake-useragent v0.2.0
 	github.com/astaxie/beego v1.12.3
-	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/beego/beego v1.12.10
 	github.com/beego/beego/v2 v2.0.1
 	github.com/boltdb/bolt v1.3.1
 	github.com/buger/jsonparser v1.1.1
-	github.com/djimenez/iconv-go v0.0.0-20160305225143-8960e66bd3da
-	github.com/dop251/goja v0.0.0-20211203105952-bf6af58bbcc8
-	github.com/dop251/goja_nodejs v0.0.0-20210225215109-d91c329300e7
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/goccy/go-json v0.9.7
@@ -27,16 +21,20 @@ require (
 	github.com/rixingyike/wechat v1.2.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/silenceper/wechat/v2 v2.0.9
-	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8
 	gopkg.in/src-d/go-git.v4 v4.13.1
-	gopkg.in/telebot.v3 v3.0.0
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/gorm v1.22.3
 )
 
 require (
+	github.com/dop251/goja v0.0.0-20221118162653-d4bf6fde1b86
+	github.com/dop251/goja_nodejs v0.0.0-20221009164102-3aa5028e57f6
+)
+
+require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
+	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8 // indirect
 )
 
 require (
@@ -44,7 +42,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
+	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gin-contrib/gzip v0.0.6
@@ -74,7 +72,7 @@ require (
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
