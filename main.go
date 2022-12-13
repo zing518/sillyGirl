@@ -7,6 +7,8 @@ import (
 
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/cdle/sillyGirl/develop/core"
+
+	_ "github.com/cdle/sillyGirl/develop/core/jd_cookie"
 	"github.com/cdle/sillyGirl/utils"
 )
 
