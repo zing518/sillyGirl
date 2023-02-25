@@ -34,9 +34,9 @@ jobs:
       run:
         cd develop && git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/qinglong.git
         
-    - name: Git clone jd_price
-      run:
-        cd develop && git clone https://github.com/cdle/jd_price.git
+#     - name: Git clone jd_price
+#       run:
+#         cd develop && git clone https://github.com/cdle/jd_price.git
         
     - name: Git clone jd_cookie
       run:
