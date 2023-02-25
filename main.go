@@ -14,7 +14,7 @@ import (
 
 var sillyGirl = core.MakeBucket("sillyGirl")
 
-func main() { //
+func main() {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	time.Local = loc
 	core.Init()
