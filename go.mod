@@ -26,10 +26,13 @@ require (
 	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.4.0
+	gorm.io/gorm v0.0.0-00010101000000-000000000000
 )
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 )
 
