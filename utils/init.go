@@ -308,5 +308,5 @@ func FormatLog(f interface{}, v ...interface{}) string {
 }
 
 func IsZeroOrEmpty(str string) bool {
-	return str == "0" || str == ""
+	return str == "0" || str == "" || str == "nil"
 }
