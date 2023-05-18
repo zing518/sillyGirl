@@ -310,3 +310,20 @@ func FormatLog(f interface{}, v ...interface{}) string {
 func IsZeroOrEmpty(str string) bool {
 	return str == "0" || str == "" || str == "nil"
 }
+
+func ChatID(p interface{}) string {
+	switch p := p.(type) {
+	case int:
+		if p == 0 {
+			return ""
+		} else {
+			return fmt.Sprint(p)
+		}
+	case string:
+		return p
+	case nil:
+		return ""
+	default:
+		return fmt.Sprint(p)
+	}
+}
