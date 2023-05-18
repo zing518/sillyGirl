@@ -23,15 +23,14 @@ require (
 	github.com/rixingyike/wechat v1.2.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/silenceper/wechat/v2 v2.0.9
+	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.4.0
-	gorm.io/gorm v1.22.3
 )
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
-	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8 // indirect
 )
 
 require (
@@ -50,8 +49,6 @@ require (
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
