@@ -306,3 +306,7 @@ func FormatLog(f interface{}, v ...interface{}) string {
 	}
 	return fmt.Sprintf(msg, v...)
 }
+
+func IsZeroOrEmpty(str string) bool {
+	return str == "0" || str == ""
+}
