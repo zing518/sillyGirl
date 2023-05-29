@@ -7,8 +7,8 @@
 - 简单易用的消息搬运功能。
 - 简单强大的自定义回复功能。
 - 完整支持 ECMAScript 5.1 的插件系统，基于 [otto](https://github.com/robertkrimen/otto)。
-- 支持通过内置的阉割版 `express` / `request` ，接入互联网。
-- 内置 `cron` ，轻松实现定时任务。
+- 支持通过内置的阉割版 `Express` / `request` ，接入互联网。
+- 内置 `Cron` ，轻松实现定时任务。
 - 持久化的 `Bucket` 存储模块。
 - 支持同时接入多个平台多个机器人，自己开发。
 
@@ -16,7 +16,7 @@
 
 ### 安装
 
-在 [releases](https://github.com/cdle/sillyGirl/releases) 中找到合适自己系统版本的程序运行带 -t 即可。
+在 [releases](https://github.com/cdle/sillyGirl/releases) 中找到合适自己系统版本的程序运行带 `-t` 可以开启终端机器人，直接与程序进行交互。
 
 ```shell
 ./sillyGirl -t
@@ -55,7 +55,7 @@ Helle World!
  * @on_start true
  */
 
-const task = cron();
+const task = Cron();
 let taskId = 0;
 let times = 5;
 const { id } = task.add("*/5 * * * * *", () => {
@@ -93,14 +93,18 @@ taskId = id;
  * @on_start true
  */
 
-const task = cron();
+const task = Cron();
 const qq_1700000 = InitAdapter("qq", "1700000"); //初始化机器人，参数分别是平台、机器人ID
 
 //模拟场景：每5秒用户100009给机器人1700000发送消息你好
 task.add("*/5 * * * * *", function () {
   let message = {
-    user_id: 100000, //用户ID
+    user_id: 100000, //用户ID，这里是假的，其他也是假的
     content: "你好", //消息内容ID
+    // chat_id: "",    //聊天ID，注意，群聊默认不回复，在对应群聊使用口令listen和reply口令激活群聊
+    // message_id: "", //消息ID
+    // chat_name: "", //群聊名
+    // user_name: "", //用户名
   };
   qq_1700000.receive(message); //机器人收到消息
 });
@@ -115,7 +119,7 @@ qq_1700000.setReply(function (message) {
 ```sh
 2023/05/24 14:36:50.001 [I]  接收到消息 qq/100000@：你好
 2023/05/24 14:36:50.001 [I]  匹配到规则：你好
-2023/05/24 14:36:50.002 [I]  给用户100000发消息：Helle World！
+2023/05/24 14:36:50.002 [I]  给用户100000发消息：Hello World！
 ```
 
 ### 与用户交互
@@ -128,8 +132,8 @@ qq_1700000.setReply(function (message) {
 
 s.reply("你先出，请在10秒内出拳！");
 ns = s.listen({
-  rules: ["[出拳:剪刀,石头,布]"],
-  timeout: 10000,
+  rules: ["[出拳:剪刀,石头,布]"], // []中出拳是参数名，剪刀,石头,布是参数可能值
+  timeout: 10000, // 超时设置
   handle: (s) => {
     let choose = s.param("出拳");
     s.reply(
@@ -152,7 +156,7 @@ if (!ns) {
  * @on_start true
  */
 
-const app = express();
+const app = Express(); //导入HTTP服务，傻妞默认开启，端口8080
 app.get("/helloWorld", function (req, res) {
   res.send("Hello world!");
 });
@@ -171,7 +175,7 @@ app.get("/helloWorld", function (req, res) {
 let api = "/testRequest"; //接口地址
 
 //第一步，实现一个原样返回请求数据的接口
-const app = express();
+const app = Express();
 app.post(api, (req, res) => res.json(req.json()));
 
 //第二步，请求第一步实现的接口
@@ -196,7 +200,7 @@ request({
  * @rule 我是[姓名]
  */
 
-const user = Bucket("user"); //创建一个 user 存储桶
+const user = Bucket("user"); //初始化存储桶user
 let name = s.param("姓名");
 
 if (user.name == "") {
@@ -226,12 +230,15 @@ if (user.name == "") {
 有了 `Bucket` 才有了傻妞从不认识小千到认识小千的过程。
 
 ### 管理员
+
 ```js
-const masters = Bucket("qq")["masters"]
+const masters = Bucket("qq")["masters"];
 ```
+
 `masters` 是管理员账号通过"&"拼接起来的，系统默认依此判断用户是否是管理员。
 
 ### 群组消息
+
 默认不监听不回复任何群组，监听口令 `listen` 和 `unlisten`，回复口令 `reply` 和 `noreply`，需要管理员在对应群组发送口令。
 
 ## 深入了解
@@ -288,11 +295,11 @@ interface Sender {
 }
 ```
 
-### express `Request` / `Response`
+### Express `Request` / `Response`
 
-只能说是够用，有需求可联系作者。插件中通过 `express()` 返回一个对象。
+只能说是够用，有需求可联系作者。插件中通过 `Express()` 返回一个对象。
 
-```js
+```ts
 interface Request {
   body(): string; //获取请求体
   json(): any; //将请求体解析为JSON
@@ -362,10 +369,12 @@ function request(options: {
 
 ```ts
 interface Message{
-  message_id: string;
-  user_id: string;
-  chat_id: chat_id;
-  content: content;
+  message_id: string; // 消息ID
+  user_id: string;    // 用户ID
+  chat_id: string;    // 聊天ID
+  content: string;    // 聊天内容
+  user_name: string;  // 用户名
+  chat_name: string;  // 群组名
 }
 
 class Adapter(botplt: string, botid: string) {
@@ -374,7 +383,7 @@ class Adapter(botplt: string, botid: string) {
   setReply(func: (message: Message) => string): void; //设置回复函数，即在收到消息时调用的函数，该函最终返回id。
   receive(message: Message): Sender; //接收一个消息，并返回一个Sende对象
   setRecallMessage(func: (i: string | string[]) => boolean): void;//设置撤回消息函数。
-  setGroupKick(func: (user_id: string, chat_id: string, reject_add_request: boolean) => void): boolean; //设置群聊成员移除函数
+  setGroupKick(func: (user_id: string, chat_id: string, reject_add_request: boolean) => void): boolean; //设置群聊成员移除函数，reject_add_request指5是否继续接受请求
   setGroupBan(func: (user_id: string, chat_id: string, duration: number) => void): boolean;//设置群聊成员禁言函数
   setGroupUnban(func: (user_id: string, chat_id: string) => void): boolean;//设置群聊成员解除禁言函数
   setIsAdmin(func: (user_id: string) => boolean): void; //设置用户是否是成员函数，默认自动实现
@@ -389,8 +398,10 @@ function getAdapterBotPlts(platform: string): string[]; //所有机器人平台
 
 ### Bucket
 
+例：通过 `Bucket("app")` 初始化一个 app 存储痛
+
 ```ts
-interface Bucket {
+interface Bucket(name: string) {
   get(key: string, defaultValue: any): any; // 取值
   set(key: string, value: any): Error | null; // 设值
   watch(key: string, event: (old: any, new_: any, key: string) => void); // 设置监听器，key 值为 * 时将监听整个桶的存储事件
@@ -406,7 +417,7 @@ interface Bucket {
 
 ### Cron
 
-可以通过`cron()`返回的对象来添加定时任务
+可以通过`let task = Cron()`返回的对象来添加定时任务 `const {id, error} = task.add("* * * * *", ()=>{})`
 
 ```ts
 interface Cron {
@@ -417,7 +428,7 @@ interface Cron {
 
 ### 插件表单
 
-可以使用注释 `@form {title: "标题", key: "test.title"}` 添加表单元素，也可以直接在插件中添加。
+可以使用注释 `@form {title: "标题", key: "test.title"}` 添加表单元素。当如也可以直接在插件代码中添加，如下。
 
 ```js
 // 单个表单元素
@@ -497,20 +508,8 @@ Form([
 ### 其他
 
 ```ts
-sleep(millsec: number): void;
-md5(string): string;
-interface strings {
-  contains(s: string, substr: string): boolean
-  replace(s: string, old: string, _new: string, n: number): string
-  replaceAll(s: string, old: string, _new: string): string
-  split(s: string, sep: string, n: number): string
-}
-interface fmt {
-  // ...
-};
-running(): boolean;
-uuid(): string;
-
-
+sleep(millsec: number): void; //等待
+md5(string): string; //加密
+running(): boolean; //服务是否运行
+uuid(): string; //生成uuid
 ```
-
