@@ -85,7 +85,7 @@ taskId = id;
 
 ### 接入机器人
 
-接入一个机器人首先 `InitAdapter`，然后再通过 `receive` 持续接收消息和设置`setReply`以发送消息。
+接入一个机器人首先 `initAdapter`，然后再通过 `receive` 持续接收消息和设置`setReplyHandler`以发送消息。
 
 ```js
 /**
@@ -94,7 +94,7 @@ taskId = id;
  */
 
 const task = Cron();
-const qq_1700000 = InitAdapter("qq", "1700000"); //初始化机器人，参数分别是平台、机器人ID
+const qq_1700000 = initAdapter("qq", "1700000"); //初始化机器人，参数分别是平台、机器人ID
 
 //模拟场景：每5秒用户100009给机器人1700000发送消息你好
 task.add("*/5 * * * * *", function () {
@@ -109,7 +109,7 @@ task.add("*/5 * * * * *", function () {
   qq_1700000.receive(message); //机器人收到消息
 });
 
-qq_1700000.setReply(function (message) {
+qq_1700000.setReplyHandler(function (message) {
   console.log(`给用户${message.user_id}发消息：${message.content}`); //回复用户
 });
 ```
@@ -270,7 +270,7 @@ interface Sender {
   getUserName(): string; //获取用户昵称
   getChatId(): string; //获取群聊ID
   getChatName(): string; //获取群聊名称
-  getMessageId(): string; //获取消息ID
+  getMessageId(): Promise<string>; //获取消息ID
   getContent(): string; //获取消息内容
   continue(): void; //使消息继续往下匹配正则，消息正常第一次被匹配就会停止继续匹配
   setContent(content: string): void; //修改接收到的消息内容，可配合`continue`被其他规则匹配
@@ -279,19 +279,25 @@ interface Sender {
   listen({
     rules: string[]; //匹配规则
     timeout: number; //超时，单位毫秒
-    handle: (s: Sender)=> string;//如果匹配成功，则进入消息处理逻辑。如果将 holdOn(content) 的结果作为返回值，会继续监听
-    private: boolean; //如果是群聊，同时监听用户消息
-    group: boolean; //如果是群聊，同时监听其他群员消息
+    handle: (s: Sender): string;//如果匹配成功，则进入消息处理逻辑。如果将 holdOn(content) 的结果作为返回值，会继续监听
+    listen_private: boolean; //监听用户群内消息时，同时监听用户消息
+    listen_group: boolean; //监听用户群内消息时，同时监听群员消息
+    allow_platforms: string[]; //平台白名单
+    prohibit_platforms: string[]; //平台黑名单
+    allow_groups: string[]; //群聊白名单
+    prohibit_groups: string[]; //群聊黑名单
+    allow_users: string[]; //用户白名单
+    prohibit_users: string[]; //群聊白名单
   }): Sender; //超时，返回undefined
   isAdmin(): boolean; //判断消息是否来自管理员
   getPlatform(): string; //获取消息平台
   getBotId(): string; //获取机器人ID
-  reply(content: string); //回复消息，媒体消息推荐使用CQ码实现
-  recallMessage(meesageId: string | string[]): boolean; //撤回消息
-  kick(user_id: string): boolean; //移出群聊
-  unkick(user_id: string): boolean; //取消移出群聊
-  ban(user_id: string, duration: number): boolean; //禁言，并指定时长
-  unban(user_id: string): boolean; //取消禁言
+  reply(content: string) Promise<string>; //回复消息，媒体消息推荐使用CQ码实现，返回消息ID
+  recallMessage(meesageId: string | string[]): Promise<boolean>; //撤回消息
+  kick(user_id: string): Promise<boolean>; //移出群聊
+  unkick(user_id: string): Promise<boolean>; //取消移出群聊
+  ban(user_id: string, duration: number): Promise<boolean>; //禁言，并指定时长
+  unban(user_id: string): Promise<boolean>;  //取消禁言
 }
 ```
 
@@ -380,8 +386,9 @@ interface Message{
 class Adapter(botplt: string, botid: string) {
   isAdapter(botid: string): boolean; //判断id是否为机器人
   push(message: Message): [messageId: string[], error: string]; //推送消息，无视禁言设置
-  setReply(func: (message: Message) => string): void; //设置回复函数，即在收到消息时调用的函数，该函最终返回id。
-  receive(message: Message): Sender; //接收一个消息，并返回一个Sende对象
+  getReplyMessage(): Promise<message: Message>; //获取一条回复消息，实际发送成功后，如果有id，请设置 message.message_id
+  setReplyHandler(func: (message: Message): string): void; //设置回复事件处理方法，方法中返回消息ID，不推荐使用。
+  receive(message: Message): Sender; //接收一个消息，并返回一个Sender对象
   setRecallMessage(func: (i: string | string[]) => boolean): void;//设置撤回消息函数。
   setGroupKick(func: (user_id: string, chat_id: string, reject_add_request: boolean) => void): boolean; //设置群聊成员移除函数，reject_add_request指5是否继续接受请求
   setGroupBan(func: (user_id: string, chat_id: string, duration: number) => void): boolean;//设置群聊成员禁言函数
