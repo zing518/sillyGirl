@@ -26,8 +26,8 @@ jobs:
     - name: Push to binary
       run: |
         n=$(date +%s%3N)
-        echo "package core" > sillyplus/core/compile_time.go
-        echo "var compiled_at = \"$n\"" >> develop/core/compile_time.go
+        echo "package core" > core/compile_time.go
+        echo "var compiled_at = \"$n\"" >> core/compile_time.go
         CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o sillyGirl_windows_amd64
         CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags "-s -w" -o sillyGirl_linux_arm64
         CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o sillyGirl_linux_amd64
@@ -44,7 +44,7 @@ jobs:
         cp ../sillyGirl_windows_amd64 sillyGirl_windows_amd64_$n 
         cp ../sillyGirl_linux_amd64 sillyGirl_linux_amd64_$n 
         cp ../sillyGirl_linux_arm64 sillyGirl_linux_arm64_$n
-        cp ../develop/core/compile_time.go  compile_time.go
+        cp ../core/compile_time.go  compile_time.go
         git add -A
         git commit -am "commit message"
         git branch -D main
