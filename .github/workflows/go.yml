@@ -20,7 +20,7 @@ jobs:
     
     - name: Git clone sillyplus
       run:
-        cd develop && git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/sillyplus.git        
+        git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/sillyplus.git        
 
     - name: Push to binary
       run: |
