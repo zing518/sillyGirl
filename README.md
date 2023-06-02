@@ -7,7 +7,7 @@
 - 简单易用的消息搬运功能。
 - 简单强大的自定义回复功能。
 - 完整支持 ECMAScript 5.1 的插件系统，基于 [otto](https://github.com/robertkrimen/otto)。
-- 支持通过内置的阉割版 `Express` / `request` ，接入互联网。
+- 支持通过内置的阉割版 `Express` / `fetch` ，接入互联网。
 - 内置 `Cron` ，轻松实现定时任务。
 - 持久化的 `Bucket` 存储模块。
 - 支持同时接入多个平台多个机器人，自己开发。
@@ -16,10 +16,10 @@
 
 ### 安装
 
-在 [releases](https://github.com/cdle/sillyGirl/releases) 中找到合适自己系统版本的程序运行带 `-t` 可以开启终端机器人，直接与程序进行交互。
+在 [releases](https://github.com/cdle/sillyplus/releases) 中找到合适自己系统版本的程序运行带 `-t` 可以开启终端机器人，直接与程序进行交互。
 
 ```shell
-./sillyGirl -t
+./sillyplus -t
 2023/05/24 14:12:01.859 [I]  默认使用boltdb进行数据存储。
 2023/05/24 14:12:01.950 [I]  Http服务已运行(8080)。
 ```
@@ -181,7 +181,7 @@ app.post(api, (req, res) => res.json(req.json()));
 //第二步，请求第一步实现的接口
 const port = Bucket("app").port ?? "8080"; // 获取http服务端口
 const url = `http://127.0.0.1:${port}${api}`;
-request({
+fetch({
   url,
   method: "POST",
   body: { value: "test" },
@@ -345,12 +345,12 @@ interface Response {
 }
 ```
 
-### request
+### fetch
 
 由 `net/http` 封装而成，如有更多需求可以联系作者。
 
 ```ts
-function request(options: {
+function fetch(options: {
   url: string; //请求地址
   method: string; //请求方法
   headers: { [key: string]: string }; //请求头
