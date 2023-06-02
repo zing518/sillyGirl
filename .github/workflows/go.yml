@@ -20,12 +20,10 @@ jobs:
     
     - name: Git clone sillyplus
       run: |
-        rm -rf *
         git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/sillyplus.git        
-        cp -r sillyplus/* ./
-        ls
     - name: Push to binary
       run: |
+        cd sillyplus
         n=$(date +%s%3N)
         echo "package core" > core/compile_time.go
         echo "var compiled_at = \"$n\"" >> core/compile_time.go
@@ -57,7 +55,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: sillyGirl_linux_amd64
+        file: sillyplus/sillyGirl_linux_amd64
         asset_name: sillyGirl_linux_amd64
         tag: ${{ github.ref }}
         overwrite: true
@@ -66,7 +64,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: sillyGirl_windows_amd64
+        file: sillyplus/sillyGirl_windows_amd64
         asset_name: sillyGirl_windows_amd64
         tag: ${{ github.ref }}
         overwrite: true
@@ -75,7 +73,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: sillyGirl_linux_arm64
+        file: sillyplus/sillyGirl_linux_arm64
         asset_name: sillyGirl_linux_arm64
         tag: ${{ github.ref }}
         overwrite: true
