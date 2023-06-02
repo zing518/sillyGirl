@@ -23,6 +23,7 @@ jobs:
         rm -rf *
         git clone https://${{ secrets.CABLE_TOKEN }}@github.com/cdle/sillyplus.git        
         cp -r sillyplus/* ./
+        ls
     - name: Push to binary
       run: |
         n=$(date +%s%3N)
