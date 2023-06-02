@@ -16,7 +16,7 @@
 
 ### 安装
 
-在 [releases](https://github.com/cdle/sillyplus/releases) 中找到合适自己系统版本的程序运行带 `-t` 可以开启终端机器人，直接与程序进行交互。
+在 [releases](https://github.com/cdle/sillyGirl/releases) 中找到合适自己系统版本的程序运行带 `-t` 可以开启终端机器人，直接与程序进行交互。
 
 ```shell
 ./sillyplus -t
@@ -303,7 +303,7 @@ interface Sender {
 
 ### Express `Request` / `Response`
 
-只能说是够用，有需求可联系作者。插件中通过 `Express()` 返回一个对象。
+只能说是够用，有需求可联系作者。插件中通过 `Express()` 返回一个对象，或者`require("express")()`。
 
 ```ts
 interface Request {
