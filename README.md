@@ -3,10 +3,11 @@
 一个不太有用的机器人，不生产消息，只搬运消息。
 
 ## 特性
+
 - 简单易用的消息搬运功能。
 - 简单强大的自定义回复功能。
 - 完整支持 ECMAScript 5.1 的插件系统，基于 [otto](https://github.com/robertkrimen/otto)。
-- 支持通过内置的阉割版 `Express` / `fetch` ，接入互联网。
+- 支持通过内置的阉割版 `Express` / `request` ，接入互联网。
 - 内置 `Cron` ，轻松实现定时任务。
 - 持久化的 `Bucket` 存储模块。
 - 支持同时接入多个平台多个机器人，自己开发。
@@ -269,7 +270,7 @@ interface Sender {
   getUserName(): string; //获取用户昵称
   getChatId(): string; //获取群聊ID
   getChatName(): string; //获取群聊名称
-  getMessageId(): Promise<string>; //获取消息ID
+  getMessageId(): {message_id: string, error: string}; //获取消息ID
   getContent(): string; //获取消息内容
   continue(): void; //使消息继续往下匹配正则，消息正常第一次被匹配就会停止继续匹配
   setContent(content: string): void; //修改接收到的消息内容，可配合`continue`被其他规则匹配
@@ -291,12 +292,12 @@ interface Sender {
   isAdmin(): boolean; //判断消息是否来自管理员
   getPlatform(): string; //获取消息平台
   getBotId(): string; //获取机器人ID
-  reply(content: string) Promise<string>; //回复消息，媒体消息推荐使用CQ码实现，返回消息ID
-  recallMessage(meesageId: string | string[]): Promise<boolean>; //撤回消息
-  kick(user_id: string): Promise<boolean>; //移出群聊
-  unkick(user_id: string): Promise<boolean>; //取消移出群聊
-  ban(user_id: string, duration: number): Promise<boolean>; //禁言，并指定时长
-  unban(user_id: string): Promise<boolean>;  //取消禁言
+  reply(content: string): string; //回复消息，媒体消息推荐使用CQ码实现，返回消息ID
+  recallMessage(meesageId: string | string[] | number): {error: string}; //撤回消息，number类型时为延时毫秒
+  kick(user_id: string): {error: string}; //移出群聊
+  unkick(user_id: string): {error: string}; //取消移出群聊
+  ban(user_id: string, duration: number): {error: string}; //禁言，并指定时长
+  unban(user_id: string): {error: string};  //取消禁言
 }
 ```
 
@@ -344,30 +345,26 @@ interface Response {
 }
 ```
 
-### fetch
+### request
 
 由 `net/http` 封装而成，如有更多需求可以联系作者。
 
 ```ts
-function fetch(options: {
+function request(options: {
   url: string; //请求地址
   method: string; //请求方法
   headers: { [key: string]: string }; //请求头
   json: boolean; // 返回json对象，等价于 responseType: "json"
-  timeout: number;//超时参数，单位毫秒
-  form:  { [key: string]: any };//formData表单数据，优先于下面的body
+  timeout: number; //超时参数，单位毫秒
+  form: { [key: string]: any }; //formData表单数据，优先于下面的body
   body: any; // 请求体，支持字符串、二进制，对象自动转json字符串和添加相应请求头
   allow_redirects: boolean; // 是否允许重定向，默认允许
-  proxy: {
-    url: string, //代理地址，支持http、https、socks5
-    user: string, //
-    password: string, //
-  }
-}): Promise<response:{
+  proxy: {};
+}): {
   status: number; // 状态码，同statusCode
   headers: { [key: string]: string };
   body: any;
-}>
+};
 ```
 
 ### Adapter
@@ -384,7 +381,7 @@ interface Message{
 
 class Adapter(botplt: string, botid: string) {
   isAdapter(botid: string): boolean; //判断id是否为机器人
-  push(message: Message): [messageId: string[], error: string]; //推送消息，无视禁言设置
+  push(message: Message): string; //推送消息，无视禁言设置
   getReplyMessage(): Promise<message: Message>; //获取一条回复消息，实际发送成功后，如果有id，请设置 message.message_id
   setReplyHandler(func: (message: Message): string): void; //设置回复事件处理方法，方法中返回消息ID，不推荐使用。
   receive(message: Message): Sender; //接收一个消息，并返回一个Sender对象
@@ -413,7 +410,7 @@ interface Bucket(name: string) {
   get(key: string, defaultValue: any): any; // 取值
   set(key: string, value: any): Error | null; // 设值
   watch(key: string, event: (old: any, new_: any, key: string) => void); // 设置监听器，key 值为 * 时将监听整个桶的存储事件
-  foreach(func: (key: string, value: any) => void): void; // 遍历值
+  getAll(): []; // 获取全部值
   delete(key: string): Error | null; // 删值
   empty(): Error | undefined; // 清空桶
   keys(): string[]; // 获取所有键名
@@ -522,6 +519,13 @@ running(): boolean; //服务是否运行
 uuid(): string; //生成uuid
 ```
 
+### 拓展 CQ 码命令
+
+[CQ:delete,id=message_id]
+[CQ:kick,user_id,chat_id,forever=true]
+[CQ:ban,user_id,chat_id,duration=0]
+
 ### 项目赞助
+
 打开微信扫一扫，深入了解作者~
 ![](https://raw.githubusercontent.com/cdle/sillyGirl/main/appreciate.jpg)
