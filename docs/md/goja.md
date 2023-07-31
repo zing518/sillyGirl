@@ -47,12 +47,12 @@ Helle World!
 
 ### 添加和销毁定时任务
 
-不同于`HelleWorld`，插件注释 `@on_start true` 时是作为傻妞系统服务持续运行的。
+插件注释 `@service true` 时是作为傻妞系统服务，伴随机器人一起启动。
 
 ```js
 /**
  * @title 定时任务
- * @on_start true
+ * @service true
  */
 
 const task = Cron();
@@ -82,46 +82,6 @@ taskId = id;
 2023/05/27 19:57:15.001 [I]  每5秒执行一次任务，1次后结束任务。
 2023/05/27 19:57:20.000 [I]  每5秒执行一次任务，这是最后一次任务。
 ```
-
-### 接入机器人
-
-接入一个机器人首先 `initAdapter`，然后再通过 `receive` 持续接收消息和设置`setReplyHandler`以发送消息。
-
-```js
-/**
- * @title 第一个机器人
- * @on_start true
- */
-
-const task = Cron();
-const qq_1700000 = initAdapter("qq", "1700000"); //初始化机器人，参数分别是平台、机器人ID
-
-//模拟场景：每5秒用户100009给机器人1700000发送消息你好
-task.add("*/5 * * * * *", function () {
-  let message = {
-    user_id: 100000, //用户ID，这里是假的，其他也是假的
-    content: "你好", //消息内容ID
-    // chat_id: "",    //聊天ID，注意，群聊默认不回复，在对应群聊使用口令listen和reply口令激活群聊
-    // message_id: "", //消息ID
-    // chat_name: "", //群聊名
-    // user_name: "", //用户名
-  };
-  qq_1700000.receive(message); //机器人收到消息
-});
-
-qq_1700000.setReplyHandler(function (message) {
-  console.log(`给用户${message.user_id}发消息：${message.content}`); //回复用户
-});
-```
-
-程序每 5 秒都会输出该机器人收到的消息以及同时触发规则运行插件的日志。
-
-```sh
-2023/05/24 14:36:50.001 [I]  接收到消息 qq/100000@：你好
-2023/05/24 14:36:50.001 [I]  匹配到规则：你好
-2023/05/24 14:36:50.002 [I]  给用户100000发消息：Hello World！
-```
-
 ### 与用户交互
 
 ```js
@@ -153,7 +113,7 @@ if (!ns) {
 ```js
 /**
  * @title 第一个web服务
- * @on_start true
+ * @service true
  */
 
 const app = Express(); //导入HTTP服务，傻妞默认开启，端口8080
@@ -169,7 +129,7 @@ app.get("/helloWorld", function (req, res) {
 ```js
 /**
  * @title 实现一个HTTP 请求
- * @on_start true
+ * @service true
  */
 
 let api = "/testRequest"; //接口地址
@@ -250,7 +210,7 @@ const masters = Bucket("qq")["masters"];
 | `title`       | HelloWorld                         | 插件标题                                           |
 | `rule`        | raw `^我是([\s\S]+)$`              | 可写多行，取括号内参数 `s.param(1)` ，多个参数类推 |
 | `priority`    | `1`                                | 插件优先级，越高则优先处理                         |
-| `on_start`    | `true`                             | 插件后台任务执行脚本，避免重复运行                 |
+| `service`    | `true`                             | 插件后台任务执行脚本，避免重复运行                 |
 | `disable`     | `true`                             | 禁用脚本                                           |
 | `form`        | `{title: "姓名", key:"user.name"}` | 插件表，key 值对应 `存储桶.键名`                   |
 | `public`      | `true`                             | 公开插件                                           |
@@ -514,14 +474,8 @@ Form([
 sleep(millsec: number): void; //等待
 md5(string): string; //加密
 running(): boolean; //服务是否运行
-uuid(): string; //生成uuid
+genUuid(): string; //生成uuid
 ```
-
-### 拓展 CQ 码命令
-
-[CQ:delete,id=message_id]
-[CQ:kick,user_id,chat_id,forever=true]
-[CQ:ban,user_id,chat_id,duration=0]
 
 ### 项目赞助
 
