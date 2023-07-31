@@ -1,4 +1,4 @@
-<h1 align="center">傻妞机器人</h1>
+<h1 align="center">傻妞</h1>
 <div align="center">
 <font size=3> Nodejs环境的插件式机器人框架，它可以diy Adapter来对接任何平台来实现交互.</font>
 
@@ -36,7 +36,9 @@ _
 # 开发
 
 [开发文档](https://cdle.github.io/sillyGirl)
-> 如果是手机端浏览开发文档，请点击开发文档左下角的按钮手动打开侧边栏目录
+> 如果是手机端浏览开发文档，请点击开发文档左下角的按钮手动打开侧边栏目录。
+
+> 如果你是纯小白可以了解内置插件系统 [开发文档](./md/goja.md)，快速进行插件开发
 
 # 其他
 
