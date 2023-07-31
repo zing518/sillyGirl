@@ -82,6 +82,7 @@ taskId = id;
 2023/05/27 19:57:15.001 [I]  每5秒执行一次任务，1次后结束任务。
 2023/05/27 19:57:20.000 [I]  每5秒执行一次任务，这是最后一次任务。
 ```
+
 ### 与用户交互
 
 ```js
@@ -141,14 +142,13 @@ app.post(api, (req, res) => res.json(req.json()));
 //第二步，请求第一步实现的接口
 const port = Bucket("app").port ?? "8080"; // 获取http服务端口
 const url = `http://127.0.0.1:${port}${api}`;
-fetch({
+const { body } = request({
   url,
   method: "POST",
   body: { value: "test" },
-})
-  .then((resp) => resp.json())
-  .then((data) => console.log(`value is ${data.value}`))
-  .catch((e) => console.log(e));
+  json: true,
+});
+console.log(`value is ${body.value}`);
 ```
 
 ### 持久化存储
@@ -210,7 +210,7 @@ const masters = Bucket("qq")["masters"];
 | `title`       | HelloWorld                         | 插件标题                                           |
 | `rule`        | raw `^我是([\s\S]+)$`              | 可写多行，取括号内参数 `s.param(1)` ，多个参数类推 |
 | `priority`    | `1`                                | 插件优先级，越高则优先处理                         |
-| `service`    | `true`                             | 插件后台任务执行脚本，避免重复运行                 |
+| `service`     | `true`                             | 插件后台任务执行脚本，避免重复运行                 |
 | `disable`     | `true`                             | 禁用脚本                                           |
 | `form`        | `{title: "姓名", key:"user.name"}` | 插件表，key 值对应 `存储桶.键名`                   |
 | `public`      | `true`                             | 公开插件                                           |
