@@ -1,4 +1,4 @@
-<h1 align="center">傻妞机器人</h1>
+<h1 align="center">傻妞</h1>
 <div align="center">
 <font size=3> Nodejs环境的插件式机器人框架，它可以diy Adapter来对接任何平台来实现交互.</font>
 
