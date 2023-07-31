@@ -3,10 +3,10 @@
 
 ## Docker
 ```bash
-# 在你要存放数据的目录下手动新建BncrData文件夹
+# 在你要存放数据的目录下手动新建sillyGirl文件夹
 # (以root目录为例)
 # 警告！群晖用户请勿在root下存放任何文件！修改成你的硬盘目录！
-mkdir /root/sillyGirl    #在root目录新建BncrData文件夹
+mkdir /root/sillyGirl    #在root目录新建sillyGirl文件夹
 
 # 拉取并运行容器 并进入交互控制台
 docker run -itd \
