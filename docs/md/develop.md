@@ -423,7 +423,8 @@ s.getAdapter().then((adapter) => console.log(adapter););
  * @cron 0 0 *\/5 * * *
  * // 是否服务模块，会在系统启动时执行该插件内容，触发时 platform 为 *
  * @service false
- */
+ * // 给插件设置一个好看的头像
+ * @icon https://wx.zsxq.com/dweb2/assets/images/favicon_32.ico
 ```
 
 ## 写一个简单的 hello world
