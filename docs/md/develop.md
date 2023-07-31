@@ -66,9 +66,51 @@ const {
   let url = `https://api.pwmqr.com/qrcode/create/?url=${encodeURI(
     await s.param(1)
   )}`;
-  await s.reply(buildCQTag("image", {url}));
+  await s.reply(buildCQTag("image", { url }));
   //等价写法
   await s.reply(image(url));
+})();
+```
+
+### parseCQText 解析 CQ 码
+
+```js
+/**
+ * @title 钉钉机器人
+ * @create_at 2023-07-03 08:07:43
+ * @description 🐔钉钉机器人适配器。
+ * @author 佚名
+ * @version v1.0.3
+ * @public true
+ * @class 机器人
+ * @service true
+ */
+
+const {
+  utils: { parseCQText },
+} = require("sillygirl");
+
+(async () => {
+  let adapter = new Adapter({
+    platform: "dingtalk",
+    bot_id: wsdata.msg.user.id,
+    replyHandler: async ({ user_id, chat_id, content }) => {
+      for (let item of parseCQText(content)) {
+        if (typeof item == "string") {
+          // item 此时是文本，执行发送文本消息逻辑
+        }
+        if (item.type == "image") {
+          let url = item.params.url;
+          // url 是图片链接，执行发送图片消息逻辑
+        }
+        if (item.type == "video") {
+          let url = item.params.url;
+          // url 是视频链接，执行发送视频消息逻辑
+        }
+      }
+      return "${message_id}"
+    },
+  });
 })();
 ```
 
