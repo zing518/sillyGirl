@@ -33,7 +33,7 @@
 
 ```javascript
 //休眠5秒 不用await 关键字无效
-await sleep(5);
+await sleep(5000);
 ```
 
 ## utils 工具包(待实现)
