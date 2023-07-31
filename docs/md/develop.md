@@ -19,6 +19,7 @@
     plugins/hello/index.js  //会被当做插件载入
     plugins/index.js  //忽略
     ```
+
   - 重载：plugins 下的所有文件都是保存既重载
 
 - language
@@ -36,16 +37,49 @@
 await sleep(5000);
 ```
 
-## utils 工具包(待实现)
+## utils 工具包
 
-### utils.npmInstall 安装 npm 包
+### buildCQTag 拼接 CQ 码
+
+本项目消息机遇字符串，图片和视频等通过 CQ 码实现，因此提供了拼接方法
+
+```js
+/**
+ * @author 猫咪
+ * @origin 傻妞官方
+ * @version v1.0.0
+ * @create_at 2022-09-08 07:31:42
+ * @title 二维码
+ * @rule 二维码 ?
+ * @description 🐒生成指定内容的一个二维码。
+ * @public true
+ * @icon https://bpic.51yuansu.com/pic3/cover/02/70/77/5a1878243d237_610.jpg
+ * @class 图片
+ */
+
+const {
+  sender: s,
+  utils: { buildCQTag, image },
+} = require("sillygirl");
+
+(async () => {
+  let url = `https://api.pwmqr.com/qrcode/create/?url=${encodeURI(
+    await s.param(1)
+  )}`;
+  await s.reply(buildCQTag("image", {url}));
+  //等价写法
+  await s.reply(image(url));
+})();
+```
+
+### utils.npmInstall 安装 npm 包 (待实现)
 
 ```js
 await utils.npmInstall("request"); //会返回执行信息String
 await utils.npmInstall("request", { outConsole: true }); // 将会在控制台实时打印安装情况，返回结果为null
 ```
 
-### utils.testModule 测试 npm 包是否存在
+### utils.testModule 测试 npm 包是否存在 (待实现)
 
 ```js
 await utils.testModule(["telegram", "input"]); //将只测试，返回结果
@@ -212,7 +246,6 @@ const ns = dingtalk.sender({
 // sleep(1000).then(() => {
 //   dingtalk.destroy();
 // });
-
 ```
 
 # 插件开发
