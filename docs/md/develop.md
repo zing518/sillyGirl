@@ -261,7 +261,7 @@ const {
 
 ```python
 # python
-from sillygirl import Bucket, Adapter
+from sillygirl import Bucket
 import asyncio
 
 test = Bucket("test")
