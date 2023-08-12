@@ -276,6 +276,8 @@ async def main():
         print("New New value:", new_value)
         return {
             "now": new_value,
+            #"error": "具体错误，将会撤销修改"
+            #"message": "携带的额外信息"
         }
 
     test.watch("*", handle)
