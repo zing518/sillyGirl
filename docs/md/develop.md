@@ -21,20 +21,32 @@
     ```
 
   - 重载：plugins 下的所有文件都是保存既重载
+  - 默认使用识别为 Node 开发语言，否则请在插件目录加上 `py_` 、`php_` 前缀
+  - 内置的 JS 引擎仅支持在后台管理开发面板中进行开发
 
 - language
 
-  - 存放语言支持的一些依赖，请不要动它。当然目前只有`node`，未来`python`、`php`会陆续支持
+  - 存放语言支持的一些依赖，请不要动它。当然目前只有`node`、`python`
 
 # 模块方法介绍
 
 ## async sleep
 
-休眠(阻塞运行),传 number,注意单位是毫秒
+Node 休眠(阻塞运行),传 number,注意单位是毫秒
 
 ```javascript
-//休眠5秒 不用await 关键字无效
+//内置js
+time.sleep(5000);
+```
+
+```javascript
+//node
 await sleep(5000);
+```
+
+```python
+#python
+await asyncio.sleep(5)
 ```
 
 ## utils 工具包
@@ -43,7 +55,7 @@ await sleep(5000);
 
 本项目消息机遇字符串，图片和视频等通过 CQ 码实现，因此提供了拼接方法
 
-```js
+```
 /**
  * @author 猫咪
  * @origin 傻妞官方
@@ -56,20 +68,47 @@ await sleep(5000);
  * @icon https://bpic.51yuansu.com/pic3/cover/02/70/77/5a1878243d237_610.jpg
  * @class 图片
  */
+```
 
+```js
+//内置js
+let url = `https://api.pwmqr.com/qrcode/create/?url=${encodeURIComponent(s.param(1))}`;
+s.reply(strings.buildCQTag("image", { url }));
+//等价写法
+s.reply(image(url));
+```
+
+```js
+//node
 const {
   sender: s,
   utils: { buildCQTag, image },
 } = require("sillygirl");
 
 (async () => {
-  let url = `https://api.pwmqr.com/qrcode/create/?url=${encodeURI(
+  let url = `https://api.pwmqr.com/qrcode/create/?url=${encodeURIComponent(
     await s.param(1)
   )}`;
   await s.reply(buildCQTag("image", { url }));
   //等价写法
   await s.reply(image(url));
 })();
+```
+
+```python
+#python
+from sillygirl import sender as s, utils
+from urllib.parse import quote
+import asyncio
+
+async def main():
+  url = f"https://api.pwmqr.com/qrcode/create/?url={quote(await s.param(1))}"
+  await s.reply(utils.buildCQTag("image", { url }))
+  #等价写法
+  await s.reply(utils.image(url))
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
 ```
 
 ### parseCQText 解析 CQ 码
@@ -108,7 +147,7 @@ const {
           // url 是视频链接，执行发送视频消息逻辑
         }
       }
-      return "${message_id}"
+      return "${message_id}";
     },
   });
 })();
@@ -156,13 +195,32 @@ await utils.testModule(["telegram", "input"], { install: true }); //发现少模
 - 未读取到值默认返回值（可选）
 
 ```javascript
-//创建一个测试数据库实例
+//内置js
 const test = new Bucket("test");
-
 //读取一个key的 value 值 如果没有该数据返回undefined
-await test.get("name1"); // undefined
+consoloe.log(test.name1)// undefined
+consoloe.log(test["name1"])// undefined
 // 第二个参数作为未读取到数据的返回值
-await test.get("name1", "阿明"); // 阿明
+test.get("name1", "阿明")// 阿明
+```
+
+```javascript
+//node
+const test = new Bucket("test");
+await test.get("name1");
+await test.get("name1", "阿明");
+```
+
+```python
+#python
+test = Bucket("test")
+await test.get("name1") #None
+await test.get("name1", "阿明")
+
+#支持同步，小心阻塞watch方法
+print(test.name1) #None
+test.name1 = "阿明"
+print(test.name1)
 ```
 
 ### set()存储数据
@@ -201,6 +259,31 @@ const {
 
 ### watch() 监听数据变更，可进行拦截、修改
 
+```python
+# python
+from sillygirl import Bucket, Adapter
+import asyncio
+
+test = Bucket("test")
+
+async def main():
+    async def handle(old_value, new_value, key):
+        print("Bucket value changed!")
+        print("Key:", key)
+        print("Old value:", old_value)
+        print("New value:", new_value)
+        new_value = f"new {new_value}"
+        print("New New value:", new_value)
+        return {
+            "now": new_value,
+        }
+
+    test.watch("*", handle)
+    await asyncio.Queue().get()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
 # 适配器开发
 
 ## 元信息配置
@@ -217,7 +300,7 @@ const {
 
 基本使用方法：
 
-```javascript
+```
 /**
  * @title 钉钉机器人
  * @create_at 2023-07-30 11:09:12
@@ -226,7 +309,10 @@ const {
  * @version v1.0.0
  * @service true
  */
+```
 
+```javascript
+//node
 const { Adapter, sleep } = require("sillygirl");
 
 const bot_id = "";
@@ -290,6 +376,20 @@ const ns = dingtalk.sender({
 // });
 ```
 
+```python
+#python
+from sillygirl import Adapter, console
+async def main():
+    def replyHandler(message):
+        console.log("message", message)
+        return "ok"
+    bot = Adapter(platform="terminal2", bot_id="default", replyHandler=replyHandler)
+    ns = await bot.sender({"user_id": "user_id"})
+    console.log(await ns.reply("hello"))
+    # await bot.destroy()
+    await asyncio.sleep(10)
+```
+
 # 插件开发
 
 ## sender 方法合集
@@ -309,7 +409,18 @@ const { sender: s } = require("sillygirl");
 ### sender.getUserId() 获取用户 id
 
 ```js
+//内置js
+console.log(s.getUserId())
+```
+
+```js
+//node
 s.getUserId().then((user_id) => console.log(`用户ID：${user_id}`));
+```
+
+```python
+#python
+print(await s.getUserId())
 ```
 
 ### sender.getChatId() 获取群聊 id
